@@ -42,6 +42,7 @@
  */
 
 .grid-container {
+  position: relative;
   display: flex;
   flex-flow: row wrap;
   max-width: 768px;
@@ -61,20 +62,12 @@
   align-items: center;
 }
 
-.grid-item-1-5 {
-  flex: 1 1 20%;
-}
-
 .grid-item-1-4 {
   flex: 1 1 25%;
 }
 
 .grid-item-1-2 {
   flex: 1 1 50%;
-}
-
-.grid-item-3-4 {
-  flex: 1 1 75%;
 }
 
 .grid-item:first-of-type {
@@ -120,6 +113,55 @@
 /**
  * foodsList styles
  */
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.table-cell {
+  text-align: right;
+  font-size: 18px;
+  padding: 14px 0;
+}
+
+.table-cell--delete {
+  text-align: right;
+}
+
+.table-column__heading {
+  font-size: 24px;
+  width: 13.6%;
+}
+
+.table-column__heading:first-of-type {
+  text-align: left;
+  width: 32%;
+}
+
+.table-footer {
+  border-top: 1px solid #282c34
+}
+
+.table-footer .table-cell {
+  padding-top: 24px;
+}
+.table-header {
+  border-bottom: 1px solid #282c34
+}
+.table-header .table-cell {
+  padding-bottom: 18px;
+}
+
+.table-row { }
+
+.table-row__heading {
+  text-align: left;
+}
+
+.table-row--labels {}
 
 .labels-row,
 .totals-row {

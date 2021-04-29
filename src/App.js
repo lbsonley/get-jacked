@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import AutoSuggest from "react-autosuggest";
+import uniqid from "uniqid";
 import foods from "./data/food";
 import "./App.css";
 import db from "./dexie";
@@ -30,7 +31,7 @@ function renderSuggestion(suggestion) {
   );
 }
 
-const initialState = { foodsList: [] };
+const initialState = { foodData: {} };
 
 function calculateItemNutrition({ foodData, quantity }) {
   const {
@@ -51,19 +52,22 @@ function calculateItemNutrition({ foodData, quantity }) {
     .reduce((acc, [key, value]) => {
       acc[key] = Math.round(value * 10) / 10
       return acc;
-    }, {})
+    }, {});
 
   computedNutritionalValue.name = `${quantity} ${unit} ${name}`
   computedNutritionalValue.unit = unit;
   return computedNutritionalValue;
 }
 
-function calculateTotalNutrition(foodsList) {
-  let totalNutrients = foodsList.reduce((acc, cur) => {
-    acc.calories += cur.calories;
-    acc.carbohydrates += cur.carbohydrates;
-    acc.fat += cur.fat;
-    acc.protein += cur.protein;
+function calculateTotalNutrition(foodData) {
+  /* sum calories and macro nutrients */
+  debugger;
+  let totalNutrients = Object.values(foodData).reduce((acc, cur) => {
+    const { nutrition } = cur;
+    acc.calories += nutrition.calories;
+    acc.carbohydrates += nutrition.carbohydrates;
+    acc.fat += nutrition.fat;
+    acc.protein += nutrition.protein;
 
     return acc;
   }, {
@@ -73,6 +77,7 @@ function calculateTotalNutrition(foodsList) {
     protein: 0,
   });
 
+  /* round sums */
   totalNutrients = Object.entries(totalNutrients).reduce((acc, [key, value]) => {
     acc[key] = Math.round(value);
     return acc;
@@ -85,21 +90,36 @@ function reducer(state, action) {
   const { type, payload } = action;
   switch (type) {
     case 'addFood':
+      const id = uniqid();
+
       return {
-        foodsList: [
-          ...state.foodsList,
-          calculateItemNutrition(payload),
-        ],
+        foodData: {
+          ...state.foodData,
+          [id]: {
+            id,
+            nutrition: calculateItemNutrition(payload),
+          },
+        },
       };
-    case 'addFoodsList':
-      console.log(payload);
+    case 'addFoodData':
       return {
-        foodsList: [
-          ...payload.foodsList
-        ],
-      };
+        foodData: {
+          ...state.foodData,
+          ...payload.foodData
+        }
+      }
     case 'removeFood':
-      return state;
+      const newFoodData = Object.keys(state.foodData)
+        .filter((id) => id !== payload.id)
+        .reduce((acc, id) => {
+          acc[id] = state.foodData[id];
+          return acc;
+        }, {});
+      return {
+        foodData: {
+          ...newFoodData,
+        }
+      };
     default:
       return state;
   }
@@ -116,7 +136,7 @@ function getDateString() {
 }
 
 function App() {
-  const [foodsListState, dispatchFoodsList] = useReducer(reducer, initialState)
+  const [foodDataState, dispatchFoodData] = useReducer(reducer, initialState)
   const [quantity, setQuantity] = useState(100);
   const [selectedFood, setSelectedFood] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -133,19 +153,19 @@ function App() {
 
       if (dayData[0]) {
         const {
-          foodsList,
+          foodData,
           totalNutrients,
         } = dayData[0];
 
-        dispatchFoodsList({ type: 'addFoodsList', payload: { foodsList } });
+        dispatchFoodData({ type: 'addFoodData', payload: { foodData } });
         setTotalNutrients(totalNutrients);
       }
     })()
   }, [])
 
   useEffect(() => {
-    setTotalNutrients(calculateTotalNutrition(foodsListState.foodsList));
-  }, [foodsListState]);
+    setTotalNutrients(calculateTotalNutrition(foodDataState.foodData));
+  }, [foodDataState]);
 
   const onChange = (event, { newValue, method }) => {
     setSelectedFood(newValue);
@@ -164,7 +184,7 @@ function App() {
     console.log(selectedFood);
     const foodData = Object.values(foods).filter(food => (food.name === selectedFood));
     if (foodData.length) {
-      dispatchFoodsList({
+      dispatchFoodData({
         type: 'addFood',
         payload: {
           foodData: foodData[0],
@@ -173,6 +193,12 @@ function App() {
       });
     }
   };
+
+  const handleRemoveFood = (event, id) => {
+    console.log(event, id);
+    event.preventDefault();
+    dispatchFoodData({ type: 'removeFood', payload: { id } });
+  }
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
@@ -183,10 +209,10 @@ function App() {
   };
 
   const handleDaySave = async (event) => {
-    const { foodsList } = foodsListState;
+    const { foodData } = foodDataState;
     event.preventDefault();
 
-    const id = await db.days.put({ id: timestamp, totalNutrients, foodsList }, timestamp);
+    const id = await db.days.put({ id: timestamp, totalNutrients, foodData }, timestamp);
     console.log("Got id " + id);
   };
 
@@ -251,69 +277,110 @@ function App() {
             </div>
           </div>
         </form>
-        <div className="grid-container food-list">
-          <div className="grid-row labels-row">
-            <div className="grid-item grid-item-1-5">
-              Food
-            </div>
-            <div className="grid-item grid-item-1-5">
-              Calories
-            </div>
-            <div className="grid-item grid-item-1-5">
-              Carbohydrates
-            </div>
-            <div className="grid-item grid-item-1-5">
-              Protein
-            </div>
-            <div className="grid-item grid-item-1-5">
-              Fat
-            </div>
-          </div>
-          {foodsListState.foodsList.map(food => {
-            const { 
-              calories,
-              carbohydrates,
-              fat,
-              name,
-              protein,
-            } = food;
-            return (
-              <div className="grid-row border-bottom">
-                <div className="grid-item grid-item-1-5">
-                  {name}
-                </div>
-                <div className="grid-item grid-item-1-5">
-                  {calories}
-                </div>
-                <div className="grid-item grid-item-1-5">
-                  {carbohydrates}
-                </div>
-                <div className="grid-item grid-item-1-5">
-                  {protein}
-                </div>
-                <div className="grid-item grid-item-1-5">
-                  {fat}
-                </div>
-              </div>
-            )
-          })}
-          <div className="grid-row totals-row">
-            <div className="grid-item grid-item-1-5">
-              Totals:
-            </div>
-            <div className="grid-item grid-item-1-5">
-              {`${totalNutrients.calories} kcal`}
-            </div>
-            <div className="grid-item grid-item-1-5">
-              {`${totalNutrients.carbohydrates} g`}
-            </div>
-            <div className="grid-item grid-item-1-5">
-              {`${totalNutrients.protein} g`}
-            </div>
-            <div className="grid-item grid-item-1-5">
-              {`${totalNutrients.fat} g`}
-            </div>
-          </div>
+        <div className="grid-container">
+
+          <table className="table">
+            <thead className="table-header">
+              <tr className="table-row table-row--labels">
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Food
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Cal
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Carb
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Pro
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Fat
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(foodDataState.foodData).map(food => {
+                const {
+                  id,
+                  nutrition: {
+                    calories,
+                    carbohydrates,
+                    fat,
+                    name,
+                    protein,
+                  }
+                } = food;
+                return (
+                  <tr key={id}className="table-row">
+                    <th
+                      className="table-cell table-row__heading"
+                      scope="row"
+                    >
+                      {name}
+                    </th>
+                    <td className="table-cell">
+                      {calories}
+                    </td>
+                    <td className="table-cell">
+                      {carbohydrates}
+                    </td>
+                    <td className="table-cell">
+                      {protein}
+                    </td>
+                    <td className="table-cell">
+                      {fat}
+                    </td>
+                    <td className="table-cell table-cell--delete">
+                      <button
+                        className="button"
+                        onClick={(event) => { handleRemoveFood(event, id) }}
+                      >
+                        X
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+            <tfoot className="table-footer">
+              <tr className="table-row totals-row">
+                <th
+                  className="table-cell table-row__heading"
+                  scope="row"
+                >
+                  Totals:
+                </th>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.calories} kcal`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.carbohydrates} g`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.protein} g`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.fat} g`}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
         <form className="save-day-form">
           <div className="grid-container">
