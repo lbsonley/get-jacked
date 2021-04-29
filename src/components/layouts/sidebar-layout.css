@@ -36,10 +36,19 @@
   align-items: center;
   padding: 28px 24px;
   color: #fff;
+  font-weight: bold;
 }
 
 .layout-sidebar__navigation-list-item--active {
   background-color: #33CABB ;
+}
+
+.layout-sidebar__nagivation-list-link {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  color: #fff;
+  text-decoration: none;
 }
 
 .layout-main-content {
