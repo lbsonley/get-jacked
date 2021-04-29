@@ -43,6 +43,20 @@ const food = {
     name: 'Barbell Protein Bar',
     unit: 'bar',
   },
+  bellPepper: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 31,
+      carbohydrates: 6,
+      fat: 0.3,
+      protein: 1,
+      saturatedFat: 0,
+    },
+    foodGroup: foodGroups.vegetablesAndLegumes,
+    id: 'bellPepper',
+    name: 'Pepper (Bell)',
+    unit: 'g',
+  },
   bioBuendnerFleisch: {
     baseMeasure: 100,
     baseNutrition: {
@@ -304,6 +318,21 @@ const food = {
     name: 'Gluten Free Oatmeal',
     unit: 'g',
   },
+  hazlenuts: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 628,
+      carbohydrates: 17,
+      fat: 61,
+      protein: 15,
+      saturatedFat: 4.5,
+      sugar: 4.3,
+    },
+    foodGroup: foodGroups.meatsAndNuts,
+    id: 'hazlenuts',
+    name: 'Hazlenuts',
+    unit: 'g',
+  },
   kidneyBeansDry: {
     baseMeasure: 100,
     baseNutrition: {
@@ -446,6 +475,20 @@ const food = {
     id: 'seelaenderli',
     name: 'Seelaenderli',
     unit: 'sausage',
+  },
+  sourCreamValflora: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 338,
+      carbohydrates: 3.1,
+      fat: 35,
+      saturatedFat: 21,
+      protein: 2.3,
+    },
+    foodGroup: foodGroups.dairy,
+    id: 'sourCreamValflora',
+    name: 'Sour Cream - Valflora',
+    unit: 'g',
   },
   sponserProteinBar35: {
     baseMeasure: 1,
