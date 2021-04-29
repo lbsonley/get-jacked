@@ -1,8 +1,8 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import AutoSuggest from "react-autosuggest";
 import foods from "./data/food";
 import "./App.css";
-import food from "./data/food";
+import db from "./dexie";
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -32,7 +32,7 @@ function renderSuggestion(suggestion) {
 
 const initialState = { foodsList: [] };
 
-function computeEntryNutrition({ foodData, quantity }) {
+function calculateItemNutrition({ foodData, quantity }) {
   const {
     baseMeasure,
     baseNutrition,
@@ -40,17 +40,45 @@ function computeEntryNutrition({ foodData, quantity }) {
     unit,
   } = foodData
 
-  const computedNutritionalValue = Object.entries(baseNutrition)
+  let computedNutritionalValue = Object.entries(baseNutrition)
     .reduce((acc, [key, nutrientValue]) => {
       console.log(typeof baseMeasure);
       acc[key] = (quantity / baseMeasure) * nutrientValue
       return acc;
     }, {});
 
-  console.log(computedNutritionalValue);
+  computedNutritionalValue = Object.entries(computedNutritionalValue)
+    .reduce((acc, [key, value]) => {
+      acc[key] = Math.round(value * 10) / 10
+      return acc;
+    }, {})
+
   computedNutritionalValue.name = `${quantity} ${unit} ${name}`
   computedNutritionalValue.unit = unit;
   return computedNutritionalValue;
+}
+
+function calculateTotalNutrition(foodsList) {
+  let totalNutrients = foodsList.reduce((acc, cur) => {
+    acc.calories += cur.calories;
+    acc.carbohydrates += cur.carbohydrates;
+    acc.fat += cur.fat;
+    acc.protein += cur.protein;
+
+    return acc;
+  }, {
+    calories: 0,
+    carbohydrates: 0,
+    fat: 0,
+    protein: 0,
+  });
+
+  totalNutrients = Object.entries(totalNutrients).reduce((acc, [key, value]) => {
+    acc[key] = Math.round(value);
+    return acc;
+  }, {});
+
+  return totalNutrients;
 }
 
 function reducer(state, action) {
@@ -60,8 +88,15 @@ function reducer(state, action) {
       return {
         foodsList: [
           ...state.foodsList,
-          computeEntryNutrition(payload),
-        ]
+          calculateItemNutrition(payload),
+        ],
+      };
+    case 'addFoodsList':
+      console.log(payload);
+      return {
+        foodsList: [
+          ...payload.foodsList
+        ],
       };
     case 'removeFood':
       return state;
@@ -70,11 +105,47 @@ function reducer(state, action) {
   }
 }
 
+function getDateString() {
+  const today = new Date();
+
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+
+  return `${year}-${month}-${day}`;
+}
+
 function App() {
+  const [foodsListState, dispatchFoodsList] = useReducer(reducer, initialState)
   const [quantity, setQuantity] = useState(100);
   const [selectedFood, setSelectedFood] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  const [foodsListState, dispatchFoodsList] = useReducer(reducer, initialState)
+  const [timestamp, setTimestamp] = useState(getDateString);
+  const [totalNutrients, setTotalNutrients] = useState({})
+
+  /* get saved day from dexie */
+  useEffect(() => {
+    (async () => {
+      const dayData = await db.days
+        .where(':id')
+        .equals(getDateString())
+        .toArray();
+
+      if (dayData[0]) {
+        const {
+          foodsList,
+          totalNutrients,
+        } = dayData[0];
+
+        dispatchFoodsList({ type: 'addFoodsList', payload: { foodsList } });
+        setTotalNutrients(totalNutrients);
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    setTotalNutrients(calculateTotalNutrition(foodsListState.foodsList));
+  }, [foodsListState]);
 
   const onChange = (event, { newValue, method }) => {
     setSelectedFood(newValue);
@@ -101,11 +172,23 @@ function App() {
         },
       });
     }
-  }
+  };
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
-  }
+  };
+
+  const handleTimestampChange = (event) => {
+    setTimestamp(event.target.value);
+  };
+
+  const handleDaySave = async (event) => {
+    const { foodsList } = foodsListState;
+    event.preventDefault();
+
+    const id = await db.days.put({ id: timestamp, totalNutrients, foodsList }, timestamp);
+    console.log("Got id " + id);
+  };
 
   return (
     <div className="App">
@@ -121,13 +204,13 @@ function App() {
             <div className="grid-row">
               <div className="grid-item grid-item-1-4">
                 <label
-                  className="input-label"
+                  className="label"
                   htmlFor="quantity"
                 >
                   Quantity:
                 </label>
                 <input
-                  className="quantity-input"
+                  className="input quantity-input"
                   id="quantity"
                   name="quantity"
                   value={quantity}
@@ -137,7 +220,7 @@ function App() {
 
               <div className="grid-item grid-item-1-2">
                 <label
-                  className="input-label"
+                  className="label"
                   htmlFor="food-input"
                 >
                   Food:
@@ -157,7 +240,7 @@ function App() {
               </div>
               <div className="grid-item grid-item-1-4">
                 <button
-                  className="add-food-button"
+                  className="button"
                   onClick={handleAddFood}
                 >
                   Add +
@@ -200,16 +283,16 @@ function App() {
                   {name}
                 </div>
                 <div className="grid-item grid-item-1-5">
-                  {`${Math.round(calories)} kcal`}
+                  {calories}
                 </div>
                 <div className="grid-item grid-item-1-5">
-                  {`${Math.round(carbohydrates)} g`}
+                  {carbohydrates}
                 </div>
                 <div className="grid-item grid-item-1-5">
-                  {`${Math.round(protein)} g`}
+                  {protein}
                 </div>
                 <div className="grid-item grid-item-1-5">
-                  {`${Math.round(fat)} g`}
+                  {fat}
                 </div>
               </div>
             )
@@ -219,31 +302,48 @@ function App() {
               Totals:
             </div>
             <div className="grid-item grid-item-1-5">
-              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
-                acc += cur.calories;
-                return acc;
-              }, 0))} kcal`}
+              {`${totalNutrients.calories} kcal`}
             </div>
             <div className="grid-item grid-item-1-5">
-              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
-                acc += cur.carbohydrates;
-                return acc;
-              }, 0))} g`}
+              {`${totalNutrients.carbohydrates} g`}
             </div>
             <div className="grid-item grid-item-1-5">
-              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
-                acc += cur.protein;
-                return acc;
-              }, 0))} g`}
+              {`${totalNutrients.protein} g`}
             </div>
             <div className="grid-item grid-item-1-5">
-              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
-                acc += cur.fat;
-                return acc;
-              }, 0))} g`}
+              {`${totalNutrients.fat} g`}
             </div>
           </div>
         </div>
+        <form className="save-day-form">
+          <div className="grid-container">
+            <div className="grid-row">
+              <div className="grid-item grid-item-1-4">
+                <label
+                  className="label"
+                  htmlFor="timestamp"
+                >
+                  Timestamp:
+                </label>
+                <input
+                  className="input"
+                  id="timestamp"
+                  name="timestamp"
+                  value={timestamp}
+                  onChange={handleTimestampChange}
+                ></input>
+              </div>
+              <div className="grid-item grid-item-1-4">
+                <button
+                  className="button"
+                  onClick={handleDaySave}
+                >
+                  Save Day
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );

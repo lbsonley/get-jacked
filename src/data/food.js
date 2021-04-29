@@ -57,19 +57,6 @@ const food = {
     name: 'Pepper (Bell)',
     unit: 'g',
   },
-  bioBuendnerFleisch: {
-    baseMeasure: 100,
-    baseNutrition: {
-      calories: 187,
-      carbohydrates: 1,
-      fat: 3,
-      protein: 39,
-    },
-    foodGroup: foodGroups.meatsAndNuts,
-    id: 'bioBuendnerFleisch',
-    name: 'Bio Buendnerfleisch',
-    unit: 'g',
-  },
   blackBeansDry: {
     baseMeasure: 100,
     baseNutrition: {
@@ -80,7 +67,7 @@ const food = {
     },
     foodGroup: foodGroups.vegetablesAndLegumes,
     id: 'blackBeansDry',
-    name: 'Black Beans',
+    name: 'Black Beans (dry) - Turk',
     unit: 'g',
   },
   blackberryFresh: {
@@ -135,7 +122,20 @@ const food = {
     name: 'Brussel Sprouts',
     unit: 'g',
   },
-  buendnerRohschinken: {
+  buendnerFleischMigrosBio: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 187,
+      carbohydrates: 1,
+      fat: 3,
+      protein: 39,
+    },
+    foodGroup: foodGroups.meatsAndNuts,
+    id: 'buendnerFleischMigrosBio',
+    name: 'Buendnerfleisch - Mirgos Bio',
+    unit: 'g',
+  },
+  buendnerRohschinkenMigros: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 259,
@@ -144,8 +144,8 @@ const food = {
       protein: 30,
     },
     foodGroup: foodGroups.meatsAndNuts,
-    id: 'buendnerRohschinken',
-    name: 'Buendner Rohschinken',
+    id: 'buendnerRohschinkenMigros',
+    name: 'Buendner Rohschinken - Migros',
     unit: 'g',
   },
   canteloupe: {
@@ -174,7 +174,7 @@ const food = {
     name: 'Carrot',
     unit: 'g',
   },
-  cashew: {
+  cashewUnsaltedSunQueen: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 583,
@@ -183,11 +183,11 @@ const food = {
       protein: 20,
     },
     foodGroup: foodGroups.meatsAndNuts,
-    id: 'cashew',
-    name: 'Unsalted Cashew',
+    id: 'cashewUnsaltedSunQueen',
+    name: 'Cashew (unsalted) - Sun Queen',
     unit: 'g',
   },
-  cervelat: {
+  cervelat100GMClassic: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 262,
@@ -197,7 +197,7 @@ const food = {
     },
     foodGroup: foodGroups.meatsAndNuts,
     id: 'cervelat',
-    name: 'Cervelat',
+    name: 'Cervelat (100g) - M-Classic',
     unit: 'g',
   },
   chickenBreastChoppedOptigal: {
@@ -211,7 +211,7 @@ const food = {
     },
     foodGroup: foodGroups.meatsAndNuts,
     id: 'chickenBreastChoppedOptigal',
-    name: 'Optigal Chicken Breast (chopped)',
+    name: 'Chicken Breast (chopped) - Optigal',
     unit: 'g',
   },
   chickpeasDry: {
@@ -227,7 +227,7 @@ const food = {
     name: 'Chickpeas (dry)',
     unit: 'g',
   },
-  cottageCheese: {
+  cottageCheeseMClassic: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 85,
@@ -236,8 +236,8 @@ const food = {
       protein: 10,
     },
     foodGroup: foodGroups.dairy,
-    id: 'cottageCheese',
-    name: 'Cottage Cheese',
+    id: 'cottageCheeseMClassic',
+    name: 'Cottage Cheese - M-Classic',
     unit: 'g',
   },
   driedMango: {
@@ -305,19 +305,6 @@ const food = {
     name: 'Grapefruit',
     unit: 'g',
   },
-  glutenFreeOatmeal: {
-    baseMeasure: 100,
-    baseNutrition: {
-      calories: 380,
-      carbohydrates: 60,
-      fat: 7,
-      protein: 15,
-    },
-    foodGroup: foodGroups.grains,
-    id: 'glutenFreeOatmeal',
-    name: 'Gluten Free Oatmeal',
-    unit: 'g',
-  },
   hazlenuts: {
     baseMeasure: 100,
     baseNutrition: {
@@ -372,30 +359,17 @@ const food = {
     name: 'Milk (whole)',
     unit: 'ml',
   },
-  nu3GrassFedWhey: {
+  oatmealGlutenFreeCoopBio: {
     baseMeasure: 100,
     baseNutrition: {
-      calories: 341,
-      carbohydrates: 5.5,
-      fat: 1.4,
-      protein: 77.4,
+      calories: 380,
+      carbohydrates: 60,
+      fat: 7,
+      protein: 15,
     },
-    foodGroup: foodGroups.supplements,
-    id: 'nu3GrassFedWhey',
-    name: 'nu3 Grass Fed Whey',
-    unit: 'g',
-  },
-  nu3PeanutButter: {
-    baseMeasure: 100,
-    baseNutrition: {
-      calories: 616,
-      carbohydrates: 7,
-      fat: 50,
-      protein: 29.5,
-    },
-    foodGroup: foodGroups.meatsAndNuts,
-    id: 'nu3PeanutButter',
-    name: 'nu3 Peanut Butter',
+    foodGroup: foodGroups.grains,
+    id: 'oatmealGlutenFreeCoopBio',
+    name: 'Oatmeal (gluten free) - Coop Bio',
     unit: 'g',
   },
   orange: {
@@ -411,6 +385,19 @@ const food = {
     name: 'Orange',
     unit: 'g',
   },
+  peanutButterNaturalNu3: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 616,
+      carbohydrates: 7,
+      fat: 50,
+      protein: 29.5,
+    },
+    foodGroup: foodGroups.meatsAndNuts,
+    id: 'peanutButterNaturalNu3',
+    name: 'Peanut Butter (natural) - nu3',
+    unit: 'g',
+  },
   potato: {
     baseMeasure: 100,
     baseNutrition: {
@@ -424,17 +411,20 @@ const food = {
     name: 'Potato',
     unit: 'g',
   },
-  quinoa: {
+  quinoaTricoloreMigrosBio: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 360,
       carbohydrates: 57,
       fat: 6,
+      fiber: 1.2,
       protein: 13,
+      saturatedFat: 0.7,
+      sugar: 4.2,
     },
     foodGroup: foodGroups.grains,
-    id: 'quinoa',
-    name: 'Quinoa',
+    id: 'quinoaTricoloreMigrosBio',
+    name: 'Quinoa (tricolore) - Migros Bio',
     unit: 'g',
   },
   raspberryFresh: {
@@ -450,7 +440,23 @@ const food = {
     name: 'Raspberries (fresh)',
     unit: 'g',
   },
-  rindssaftplaetzli: {
+  riceWhiteMClassicCarolina: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 343,
+      carbohydrates: 77,
+      fat: 0.5,
+      fiber: 1,
+      protein: 7,
+      saturatedFat: 0.5,
+      sugar: 0,
+    },
+    foodGroup: foodGroups.grains,
+    id: 'riceWhiteMClassicCarolina',
+    name: 'Rice (white, carolina) - M-Classic',
+    unit: 'g',
+  },
+  rindssaftplaetzliCoop: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 108,
@@ -459,8 +465,8 @@ const food = {
       protein: 22,
     },
     foodGroup: foodGroups.meatsAndNuts,
-    id: 'rindssaftplaetzli',
-    name: 'Rindssaftplaetzli',
+    id: 'rindssaftplaetzliCoop',
+    name: 'Rindssaftplaetzli - Coop',
     unit: 'g',
   },
   seelaenderli: {
@@ -553,7 +559,7 @@ const food = {
     },
     foodGroup: foodGroups.grains,
     id: 'tortillaWholeWheatPanchoVilla',
-    name: 'Pancho Villa Tortilla (whole wheat)',
+    name: 'Tortilla (whole wheat) - Pancho Villa',
     unit: 'tortilla',
   },
   tunaInWater: {
@@ -569,7 +575,7 @@ const food = {
     name: 'Tuna (in water)',
     unit: 'g',
   },
-  walnut: {
+  walnutsUnsaltedSunQueen: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 686,
@@ -578,8 +584,21 @@ const food = {
       fat: 65,
     },
     foodGroup: foodGroups.meatsAndNuts,
-    id: 'walnut',
-    name: 'Unsalted Walnuts',
+    id: 'walnutsUnsaltedSunQueen',
+    name: 'Walnuts (unsalted) - Sun Queen',
+    unit: 'g',
+  },
+  wheyGrassFedNu3: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 341,
+      carbohydrates: 5.5,
+      fat: 1.4,
+      protein: 77.4,
+    },
+    foodGroup: foodGroups.supplements,
+    id: 'wheyGrassFedNu3',
+    name: 'Whey (grass fed) - nu3',
     unit: 'g',
   },
   zucchini: {
