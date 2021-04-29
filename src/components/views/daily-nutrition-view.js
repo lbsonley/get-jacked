@@ -1,6 +1,6 @@
 import React from "react";
-import SidebarLayout from "../components/layouts/sidebar-layout";
-import DailyNutritionContainer from "../components/containers/daily-nutrition-container/daily-nutrition-container";
+import SidebarLayout from "../layouts/sidebar-layout";
+import DailyNutritionContainer from "../containers/daily-nutrition-container/daily-nutrition-container";
 
 const DailyNutritionView = () => {
   return (

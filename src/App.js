@@ -1,5 +1,5 @@
 import React from "react";
-import DailyNutritionView from "./views/daily-nutrition-view"
+import DailyNutritionView from "./components/views/daily-nutrition-view"
 
 function App() {
 
