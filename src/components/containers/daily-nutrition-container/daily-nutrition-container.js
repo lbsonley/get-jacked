@@ -147,8 +147,7 @@ function DailyNutritionContainer() {
     (async () => {
       const dayData = await db.days
         .where(':id')
-        .equals("2021-4-29")
-        // .equals(getDateString())
+        .equals(getDateString())
         .toArray();
 
       if (dayData[0]) {
