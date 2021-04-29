@@ -63,13 +63,13 @@ function calculateTotalNutrition(foodData) {
   /* sum calories and macro nutrient values for all food entries */
   let totalNutrients = Object.values(foodData).reduce((acc, cur) => {
     const { nutrition } = cur;
-    acc.calories += nutrition.calories;
-    acc.carbohydrates += nutrition.carbohydrates;
-    acc.fat += nutrition.fat;
-    acc.fiber += nutrition.fiber;
-    acc.protein += nutrition.protein;
-    acc.saturatedFat += nutrition.saturatedFat;
-    acc.sugar += nutrition.sugar;
+    acc.calories += nutrition.calories || 0;
+    acc.carbohydrates += nutrition.carbohydrates || 0;
+    acc.fat += nutrition.fat || 0;
+    acc.fiber += nutrition.fiber || 0;
+    acc.protein += nutrition.protein || 0;
+    acc.saturatedFat += nutrition.saturatedFat || 0;
+    acc.sugar += nutrition.sugar || 0;
 
     return acc;
   }, {
