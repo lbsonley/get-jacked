@@ -66,14 +66,20 @@ function calculateTotalNutrition(foodData) {
     acc.calories += nutrition.calories;
     acc.carbohydrates += nutrition.carbohydrates;
     acc.fat += nutrition.fat;
+    acc.fiber += nutrition.fiber;
     acc.protein += nutrition.protein;
+    acc.saturatedFat += nutrition.saturatedFat;
+    acc.sugar += nutrition.sugar;
 
     return acc;
   }, {
     calories: 0,
     carbohydrates: 0,
     fat: 0,
+    fiber: 0,
     protein: 0,
+    saturatedFat: 0,
+    sugar: 0,
   });
 
   /* round sums */
@@ -135,14 +141,24 @@ function getDateString() {
 }
 
 function App() {
+  /* food items in daily food list */
   const [foodDataState, dispatchFoodData] = useReducer(reducer, initialState)
+  /* add food form quantity input value */
   const [quantity, setQuantity] = useState(100);
+  /* add food form AutoSuggest input value */
   const [selectedFood, setSelectedFood] = useState('');
+  /* suggestions provided to the AutoSuggest input in the add food form */
   const [suggestions, setSuggestions] = useState([]);
+  /* save food list form timestamp input value */
   const [timestamp, setTimestamp] = useState(getDateString);
+  /* sum of nutritional values in food list */
   const [totalNutrients, setTotalNutrients] = useState({})
 
-  /* get saved day from dexie */
+  /**
+   * Runs once at component init
+   * - get saved day from dexie
+   * - this first query to dexie calls db.open() to open db connection and create tables if necessary
+   */
   useEffect(() => {
     (async () => {
       const dayData = await db.days
@@ -150,23 +166,24 @@ function App() {
         .equals(getDateString())
         .toArray();
 
+      /* if data today's YYYY-MM-DD timestamp exists in dexie */
       if (dayData[0]) {
         const {
-          foodData,
-          totalNutrients,
+          foodData
         } = dayData[0];
 
+        /* update food data with values from dexie */
         dispatchFoodData({ type: 'addFoodData', payload: { foodData } });
-        setTotalNutrients(totalNutrients);
       }
     })()
   }, [])
 
+  /* update total nutrient counts when food data changes */
   useEffect(() => {
     setTotalNutrients(calculateTotalNutrition(foodDataState.foodData));
   }, [foodDataState]);
 
-  const onChange = (event, { newValue, method }) => {
+  const handleAutoSuggestInputChange = (event, { newValue, method }) => {
     setSelectedFood(newValue);
   };
   
@@ -199,15 +216,15 @@ function App() {
     dispatchFoodData({ type: 'removeFood', payload: { id } });
   }
 
-  const handleQuantityChange = (event) => {
+  const handleQuantityInputChange = (event) => {
     setQuantity(event.target.value);
   };
 
-  const handleTimestampChange = (event) => {
+  const handleTimestampInputChange = (event) => {
     setTimestamp(event.target.value);
   };
 
-  const handleDaySave = async (event) => {
+  const handleSaveDayData = async (event) => {
     const { foodData } = foodDataState;
     event.preventDefault();
 
@@ -239,7 +256,7 @@ function App() {
                   id="quantity"
                   name="quantity"
                   value={quantity}
-                  onChange={handleQuantityChange}
+                  onChange={handleQuantityInputChange}
                 ></input>
               </div>
 
@@ -258,7 +275,7 @@ function App() {
                   renderSuggestion={renderSuggestion}
                   inputProps={{
                     id: "food-input",
-                    onChange: onChange,
+                    onChange: handleAutoSuggestInputChange,
                     value: selectedFood,
                   }}
                 />
@@ -396,13 +413,13 @@ function App() {
                   id="timestamp"
                   name="timestamp"
                   value={timestamp}
-                  onChange={handleTimestampChange}
+                  onChange={handleTimestampInputChange}
                 ></input>
               </div>
               <div className="grid-item grid-item-1-4">
                 <button
                   className="button"
-                  onClick={handleDaySave}
+                  onClick={handleSaveDayData}
                 >
                   Save Day
                 </button>
