@@ -4,6 +4,22 @@ import foodGroups from './food-groups';
 // TODO => saturated fat, salt, fiber, sugar
 
 const food = {
+  asparagus: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 20,
+      carbohydrates: 4,
+      fat: 0,
+      fiber: 2.1,
+      protein: 2.2,
+      saturatedFat: 0,
+      sugar: 1.9,
+    },
+    foodGroup: foodGroups.vegetablesAndLegumes,
+    id: 'asparagus',
+    name: 'Asparagus',
+    unit: 'g',
+  },
   bacon: {
     baseMeasure: 100,
     baseNutrition: {
