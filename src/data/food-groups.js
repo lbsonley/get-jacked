@@ -4,6 +4,7 @@ const foodGroups = {
   fruits: 'fruits',
   meatsAndNuts: 'meatsAndNuts',
   supplements: 'supplements',
+  sweets: 'sweets',
   vegetablesAndLegumes: 'vegetablesAndLegumes',
 };
 

@@ -30,6 +30,22 @@ const food = {
     name: 'Banana',
     unit: 'g',
   },
+  baerentatzenMidor: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 413,
+      carbohydrates: 66,
+      fat: 13,
+      fiber: 2.6,
+      protein: 6.7,
+      saturatedFat: 5.2,
+      sugar: 40,
+    },
+    foodGroup: foodGroups.sweets,
+    id: 'baerentatzenMidor',
+    name: 'Baerentatzen - Midor',
+    unit: 'g',
+  },
   barbellProteinBar: {
     baseMeasure: 1,
     baseNutrition: {
@@ -55,6 +71,22 @@ const food = {
     foodGroup: foodGroups.vegetablesAndLegumes,
     id: 'bellPepper',
     name: 'Pepper (Bell)',
+    unit: 'g',
+  },
+  blackBeansCooked: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 131,
+      carbohydrates: 24,
+      fat: 0.4,
+      fiber: 8.5,
+      protein: 8.5,
+      saturatedFat: 0.1,
+      sugar: 0.4,
+    },
+    foodGroup: foodGroups.vegetablesAndLegumes,
+    id: 'blackBeansCooked',
+    name: 'Black Beans (cooked)',
     unit: 'g',
   },
   blackBeansDry: {
@@ -227,7 +259,7 @@ const food = {
     name: 'Chickpeas (dry)',
     unit: 'g',
   },
-  cottageCheeseMClassic: {
+  cottageCheeseNatureMClassic: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 85,
@@ -236,8 +268,8 @@ const food = {
       protein: 10,
     },
     foodGroup: foodGroups.dairy,
-    id: 'cottageCheeseMClassic',
-    name: 'Cottage Cheese - M-Classic',
+    id: 'cottageCheeseNatureMClassic',
+    name: 'Cottage Cheese (nature) - M-Classic',
     unit: 'g',
   },
   driedMango: {
@@ -440,7 +472,23 @@ const food = {
     name: 'Raspberries (fresh)',
     unit: 'g',
   },
-  riceWhiteMClassicCarolina: {
+  riceWhiteCooked: {
+    baseMeasure: 100,
+    baseNutrition: {
+      calories: 130,
+      carbohydrates: 28.5,
+      fat: 0.2,
+      fiber: 0.3,
+      protein: 2.4,
+      saturatedFat: 0,
+      sugar: 0,
+    },
+    foodGroup: foodGroups.grains,
+    id: 'riceWhiteCooked',
+    name: 'Rice (white, cooked)',
+    unit: 'g',
+  },
+  riceWhiteDryMClassicCarolina: {
     baseMeasure: 100,
     baseNutrition: {
       calories: 343,
@@ -453,7 +501,7 @@ const food = {
     },
     foodGroup: foodGroups.grains,
     id: 'riceWhiteMClassicCarolina',
-    name: 'Rice (white, carolina) - M-Classic',
+    name: 'Rice (white, dry) - M-Classic Carolina',
     unit: 'g',
   },
   rindssaftplaetzliCoop: {
