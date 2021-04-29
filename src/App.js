@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 import foods from "./data/food";
 import "./App.css";
 import db from "./dexie";
+import DailyNutrition from "./views/daily-nutrition";
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -216,11 +217,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div className="App-header">
-        <h1>Calorie and Macro Nutrient Tracker</h1>
-      </div>
-      <div className="App-body">
+    <DailyNutrition>
+      <div className="App">
         <div className="grid-container">
           <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
         </div>
@@ -411,7 +409,7 @@ function App() {
           </div>
         </form>
       </div>
-    </div>
+    </DailyNutrition>
   );
 }
 
