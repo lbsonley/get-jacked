@@ -49,6 +49,7 @@ function computeEntryNutrition({ foodData, quantity }) {
 
   console.log(computedNutritionalValue);
   computedNutritionalValue.name = `${quantity} ${unit} ${name}`
+  computedNutritionalValue.unit = unit;
   return computedNutritionalValue;
 }
 
@@ -111,124 +112,139 @@ function App() {
       <div className="App-header">
         <h1>Calorie and Macro Nutrient Tracker</h1>
       </div>
-      <div className="grid-container">
-        <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
-      </div>
-      <form className="add-food-form">
+      <div className="App-body">
         <div className="grid-container">
-          <div className="grid-row">
-            <div className="grid-item grid-item-1-4">
-              <label
-                className="input-label"
-                htmlFor="quantity"
-              >
-                Quantity:
-              </label>
-              <input
-                className="quantity-input"
-                id="quantity"
-                name="quantity"
-                value={quantity}
-                onChange={handleQuantityChange}
-              ></input>
-            </div>
-
-            <div className="grid-item grid-item-1-2">
-              <label
-                className="input-label"
-                htmlFor="food-input"
-              >
-                Food:
-              </label>
-              <AutoSuggest 
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={{
-                  id: "food-input",
-                  onChange: onChange,
-                  value: selectedFood,
-                }}
-              />
-            </div>
-            <div className="grid-item grid-item-1-4">
-              <button
-                className="add-food-button"
-                onClick={handleAddFood}
-              >
-                Add +
-              </button>
-            </div>
-          </div>
-          <div className="grid-row">
-          </div>
+          <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
         </div>
+        <form className="add-food-form">
+          <div className="grid-container">
+            <div className="grid-row">
+              <div className="grid-item grid-item-1-4">
+                <label
+                  className="input-label"
+                  htmlFor="quantity"
+                >
+                  Quantity:
+                </label>
+                <input
+                  className="quantity-input"
+                  id="quantity"
+                  name="quantity"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                ></input>
+              </div>
+
+              <div className="grid-item grid-item-1-2">
+                <label
+                  className="input-label"
+                  htmlFor="food-input"
+                >
+                  Food:
+                </label>
+                <AutoSuggest 
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={{
+                    id: "food-input",
+                    onChange: onChange,
+                    value: selectedFood,
+                  }}
+                />
+              </div>
+              <div className="grid-item grid-item-1-4">
+                <button
+                  className="add-food-button"
+                  onClick={handleAddFood}
+                >
+                  Add +
+                </button>
+              </div>
+            </div>
+            <div className="grid-row">
+            </div>
+          </div>
         </form>
-        <div className="grid-container">
-          <div className="grid-row">
-            <div className="grid-item grid-item-1-4">
+        <div className="grid-container food-list">
+          <div className="grid-row labels-row">
+            <div className="grid-item grid-item-1-5">
               Food
             </div>
-            <div className="grid-item grid-item-1-4">
+            <div className="grid-item grid-item-1-5">
+              Calories
+            </div>
+            <div className="grid-item grid-item-1-5">
               Carbohydrates
             </div>
-            <div className="grid-item grid-item-1-4">
+            <div className="grid-item grid-item-1-5">
               Protein
             </div>
-            <div className="grid-item grid-item-1-4">
+            <div className="grid-item grid-item-1-5">
               Fat
             </div>
           </div>
           {foodsListState.foodsList.map(food => {
             const { 
+              calories,
               carbohydrates,
               fat,
               name,
               protein,
-             } = food;
+            } = food;
             return (
-              <div className="grid-row">
-                <div className="grid-item grid-item-1-4">
+              <div className="grid-row border-bottom">
+                <div className="grid-item grid-item-1-5">
                   {name}
                 </div>
-                <div className="grid-item grid-item-1-4">
-                  {Math.round(carbohydrates)}
+                <div className="grid-item grid-item-1-5">
+                  {`${Math.round(calories)} kcal`}
                 </div>
-                <div className="grid-item grid-item-1-4">
-                  {Math.round(protein)}
+                <div className="grid-item grid-item-1-5">
+                  {`${Math.round(carbohydrates)} g`}
                 </div>
-                <div className="grid-item grid-item-1-4">
-                  {Math.round(fat)}
+                <div className="grid-item grid-item-1-5">
+                  {`${Math.round(protein)} g`}
+                </div>
+                <div className="grid-item grid-item-1-5">
+                  {`${Math.round(fat)} g`}
                 </div>
               </div>
             )
           })}
-          <div className="grid-row">
-            <div className="grid-item grid-item-1-4">
+          <div className="grid-row totals-row">
+            <div className="grid-item grid-item-1-5">
               Totals:
             </div>
-            <div className="grid-item grid-item-1-4">
-              {Math.round(foodsListState.foodsList.reduce((acc, cur) => {
+            <div className="grid-item grid-item-1-5">
+              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
+                acc += cur.calories;
+                return acc;
+              }, 0))} kcal`}
+            </div>
+            <div className="grid-item grid-item-1-5">
+              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
                 acc += cur.carbohydrates;
                 return acc;
-              }, 0))}
+              }, 0))} g`}
             </div>
-            <div className="grid-item grid-item-1-4">
-              {Math.round(foodsListState.foodsList.reduce((acc, cur) => {
+            <div className="grid-item grid-item-1-5">
+              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
                 acc += cur.protein;
                 return acc;
-              }, 0))}
+              }, 0))} g`}
             </div>
-            <div className="grid-item grid-item-1-4">
-              {Math.round(foodsListState.foodsList.reduce((acc, cur) => {
+            <div className="grid-item grid-item-1-5">
+              {`${Math.round(foodsListState.foodsList.reduce((acc, cur) => {
                 acc += cur.fat;
                 return acc;
-              }, 0))}
+              }, 0))} g`}
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 }
