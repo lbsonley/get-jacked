@@ -60,8 +60,7 @@ function calculateItemNutrition({ foodData, quantity }) {
 }
 
 function calculateTotalNutrition(foodData) {
-  /* sum calories and macro nutrients */
-  debugger;
+  /* sum calories and macro nutrient values for all food entries */
   let totalNutrients = Object.values(foodData).reduce((acc, cur) => {
     const { nutrition } = cur;
     acc.calories += nutrition.calories;
