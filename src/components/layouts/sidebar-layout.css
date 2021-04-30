@@ -53,6 +53,7 @@
 
 .layout-main-content {
   flex: 1 0 auto;
+  height: 100vh;
   max-height: 100vh;
   padding: 0 32px 0;
   overflow-y: scroll;
