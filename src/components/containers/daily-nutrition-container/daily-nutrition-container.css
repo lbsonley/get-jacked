@@ -83,64 +83,6 @@
   border: 1px solid #282c34;
 }
 
-/**
- * foodsList styles
- */
-
-.table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  overflow: hidden;
-}
-
-.table-cell {
-  text-align: right;
-  font-size: 18px;
-  padding: 14px 0;
-}
-
-.table-cell--delete {
-  text-align: right;
-}
-
-.table-column__heading {
-  font-size: 24px;
-  width: 13.6%;
-}
-
-.table-column__heading:first-of-type {
-  text-align: left;
-  width: 32%;
-}
-
-.table-footer {
-  border-top: 1px solid #282c34
-}
-
-.table-footer .table-cell {
-  padding-top: 24px;
-}
-.table-header {
-  border-bottom: 1px solid #282c34
-}
-.table-header .table-cell {
-  padding-bottom: 18px;
-}
-
-.table-row { }
-
-.table-row__heading {
-  text-align: left;
-}
-
-.table-row--labels {}
-
-.labels-row,
-.totals-row {
-  font-weight: bold;
-}
-
 .border-bottom {
   border-bottom: 1px solid #aaa;
 }

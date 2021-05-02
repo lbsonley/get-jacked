@@ -5,6 +5,7 @@ import db from "../../../dexie";
 import foods from "../../../data/food";
 import SelectDayForm from "../../presentational/select-day-form/select-day-form";
 import "./daily-nutrition-container.css";
+import DailyNutritionTable from "../../presentational/daily-nutrition-table/daily-nutrition-table";
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -318,108 +319,11 @@ function DailyNutritionContainer() {
           </form>
         </div>
         <div className="section">
-          <table className="table">
-            <thead className="table-header">
-              <tr className="table-row table-row--labels">
-                <th
-                  className="table-cell table-column__heading"
-                  scope="col"
-                >
-                  Food
-                </th>
-                <th
-                  className="table-cell table-column__heading"
-                  scope="col"
-                >
-                  Cal
-                </th>
-                <th
-                  className="table-cell table-column__heading"
-                  scope="col"
-                >
-                  Carb
-                </th>
-                <th
-                  className="table-cell table-column__heading"
-                  scope="col"
-                >
-                  Pro
-                </th>
-                <th
-                  className="table-cell table-column__heading"
-                  scope="col"
-                >
-                  Fat
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.values(foodDataState.foodData).map(food => {
-                const {
-                  id,
-                  nutrition: {
-                    calories,
-                    carbohydrates,
-                    fat,
-                    name,
-                    protein,
-                  }
-                } = food;
-                return (
-                  <tr key={id}className="table-row">
-                    <th
-                      className="table-cell table-row__heading"
-                      scope="row"
-                    >
-                      {name}
-                    </th>
-                    <td className="table-cell">
-                      {calories}
-                    </td>
-                    <td className="table-cell">
-                      {carbohydrates}
-                    </td>
-                    <td className="table-cell">
-                      {protein}
-                    </td>
-                    <td className="table-cell">
-                      {fat}
-                    </td>
-                    <td className="table-cell table-cell--delete">
-                      <button
-                        className="button"
-                        onClick={(event) => { handleRemoveFood(event, id) }}
-                      >
-                        X
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-            <tfoot className="table-footer">
-              <tr className="table-row totals-row">
-                <th
-                  className="table-cell table-row__heading"
-                  scope="row"
-                >
-                  Totals:
-                </th>
-                <td className="table-cell table-cell__footer">
-                  {`${totalNutrients.calories} kcal`}
-                </td>
-                <td className="table-cell table-cell__footer">
-                  {`${totalNutrients.carbohydrates} g`}
-                </td>
-                <td className="table-cell table-cell__footer">
-                  {`${totalNutrients.protein} g`}
-                </td>
-                <td className="table-cell table-cell__footer">
-                  {`${totalNutrients.fat} g`}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <DailyNutritionTable
+            foodData={foodDataState.foodData}
+            handleRemoveFood={handleRemoveFood}
+            totalNutrients={totalNutrients}
+          />
         </div>
         <div className="section">
           <button
