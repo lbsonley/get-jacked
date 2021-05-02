@@ -1,11 +1,33 @@
-# Getting Started with Create React App
+# getJacked: A Calorie and Nutrition Tracker for Bulking
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**_A Calorie Counter App built for People trying to add lean muscle mass._**
+
+## Current Feature Set
+
+- Enter quantity and type of food into daily log.
+- Remove entries from daily log.
+- Track total calorie and macronutrient consumption of items entered to daily log.
+- Store daily logs in IndexedDB for persistet storage. **Warning** Clearing browser data will remove history.
+
+## Planned Features
+
+- Add ability to track weight (Feature).
+- Add and edit entries directly in daily log table (UI Improvements).
+- Add Home page with editable calorie and macronutrient targets (Feature).
+- Add Trends page with time-series and pie charts (Feature).
 
 ## Available Scripts
 
 In the project directory, you can run:
 
+### `yarn track`
+
+Exactly the same as yarn start except that it runs on a different port.\
+Allows you to take advantage of IndexedDB on unique Port to track historical nutrition data./
+Open [http://localhost:9009](http://localhost:9009) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 ### `yarn start`
 
 Runs the app in the development mode.\
@@ -39,32 +61,3 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
