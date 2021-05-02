@@ -1,4 +1,6 @@
 const foodGroups = {
+  alcohol: 'alcohol',
+  condiments: 'condiments',
   dairy: 'dairy',
   grains: 'grains',
   fruits: 'fruits',
