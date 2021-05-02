@@ -1,37 +1,11 @@
 import { useEffect, useReducer, useState } from "react";
-import AutoSuggest from "react-autosuggest";
 import uniqid from "uniqid";
 import db from "../../../dexie";
 import foods from "../../../data/food";
 import SelectDayForm from "../../presentational/select-day-form/select-day-form";
 import "./daily-nutrition-container.css";
 import DailyNutritionTable from "../../presentational/daily-nutrition-table/daily-nutrition-table";
-
-function escapeRegexCharacters(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function getSuggestions(value) {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  
-  if (escapedValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('^' + escapedValue, 'i');
-
-  return Object.values(foods).filter(food => regex.test(food.name));
-}
-
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
-
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+import AddFoodForm from "../../presentational/add-food-form/add-food-form";
 
 const initialState = { foodData: {} };
 
@@ -148,12 +122,6 @@ function getTodayDateString() {
 function DailyNutritionContainer() {
   /* food items in daily food list */
   const [foodDataState, dispatchFoodData] = useReducer(reducer, initialState)
-  /* add food form quantity input value */
-  const [quantity, setQuantity] = useState(100);
-  /* add food form AutoSuggest input value */
-  const [selectedFood, setSelectedFood] = useState('');
-  /* suggestions provided to the AutoSuggest input in the add food form */
-  const [suggestions, setSuggestions] = useState([]);
   /* save food list form Selected Dateinput value */
   const [selectedDateTimestamp, setSelectedDateTimestamp] = useState(getTodayDateString);
   /* sum of nutritional values in food list */
@@ -209,22 +177,8 @@ function DailyNutritionContainer() {
       dispatchFoodData({ type: 'clearFoodData' })
     }
   }
-
-  const handleAutoSuggestInputChange = (event, { newValue, method }) => {
-    setSelectedFood(newValue);
-  };
-  
-  const onSuggestionsFetchRequested = ({ value }) => {
-    setSuggestions(getSuggestions(value));
-  };
-
-  const onSuggestionsClearRequested = () => {
-    setSuggestions([]);
-  };
-
-  const handleAddFood = (event) => {
+  const performAddFood = ({ event, selectedFood, quantity }) => {
     event.preventDefault();
-    console.log(selectedFood);
     const foodData = Object.values(foods).filter(food => (food.name === selectedFood));
     if (foodData.length) {
       dispatchFoodData({
@@ -241,10 +195,6 @@ function DailyNutritionContainer() {
     event.preventDefault();
     dispatchFoodData({ type: 'removeFood', payload: { id } });
   }
-
-  const handleQuantityInputChange = (event) => {
-    setQuantity(event.target.value);
-  };
 
   const handleSelectedDateInputChange = (event) => {
     setSelectedDateTimestamp(event.target.value);
@@ -268,55 +218,9 @@ function DailyNutritionContainer() {
       </div>
       <div className="daily-nutrition-body">
         <div className="section">
-          <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
-          <form className="add-food-form">
-            <div className="grid-row">
-              <div className="grid-item grid-item-1-4">
-                <label
-                  className="label"
-                  htmlFor="quantity"
-                >
-                  Quantity:
-                </label>
-                <input
-                  className="input quantity-input"
-                  id="quantity"
-                  name="quantity"
-                  value={quantity}
-                  onChange={handleQuantityInputChange}
-                ></input>
-              </div>
-
-              <div className="grid-item grid-item-1-2">
-                <label
-                  className="label"
-                  htmlFor="food-input"
-                >
-                  Food:
-                </label>
-                <AutoSuggest 
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  getSuggestionValue={getSuggestionValue}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={{
-                    id: "food-input",
-                    onChange: handleAutoSuggestInputChange,
-                    value: selectedFood,
-                  }}
-                />
-              </div>
-              <div className="grid-item grid-item-1-4">
-                <button
-                  className="button"
-                  onClick={handleAddFood}
-                >
-                  Add +
-                </button>
-              </div>
-            </div>
-          </form>
+          <AddFoodForm
+            performAddFood={performAddFood}
+          />
         </div>
         <div className="section">
           <DailyNutritionTable
