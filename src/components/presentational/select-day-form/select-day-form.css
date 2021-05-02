@@ -1,3 +1,6 @@
-.select-day-form__input {
+.label.select-day-form__label {
+  color: #fff;
+}
+.input.select-day-form__input {
   width: 120px;
 }

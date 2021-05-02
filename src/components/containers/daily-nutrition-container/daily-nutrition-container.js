@@ -1,9 +1,10 @@
 import { useEffect, useReducer, useState } from "react";
 import AutoSuggest from "react-autosuggest";
 import uniqid from "uniqid";
-import foods from "../../../data/food";
-import "./daily-nutrition-container.css";
 import db from "../../../dexie";
+import foods from "../../../data/food";
+import SelectDayForm from "../../presentational/select-day-form/select-day-form";
+import "./daily-nutrition-container.css";
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -109,7 +110,6 @@ function reducer(state, action) {
     case 'addFoodData':
       return {
         foodData: {
-          ...state.foodData,
           ...payload.foodData
         }
       }
@@ -149,8 +149,8 @@ function DailyNutritionContainer() {
   const [selectedFood, setSelectedFood] = useState('');
   /* suggestions provided to the AutoSuggest input in the add food form */
   const [suggestions, setSuggestions] = useState([]);
-  /* save food list form timestamp input value */
-  const [timestamp, setTimestamp] = useState(getDateString);
+  /* save food list form Selected Dateinput value */
+  const [selectedDateTimestamp, setSelectedDateTimestamp] = useState(getDateString);
   /* sum of nutritional values in food list */
   const [totalNutrients, setTotalNutrients] = useState({})
 
@@ -163,7 +163,7 @@ function DailyNutritionContainer() {
     (async () => {
       const dayData = await db.days
         .where(':id')
-        .equals(getDateString())
+        .equals(selectedDateTimestamp)
         .toArray();
 
       /* if data today's YYYY-MM-DD timestamp exists in dexie */
@@ -182,6 +182,25 @@ function DailyNutritionContainer() {
   useEffect(() => {
     setTotalNutrients(calculateTotalNutrition(foodDataState.foodData));
   }, [foodDataState]);
+
+  const handleUpdateDailyNutritionData = async (event) => {
+    event.preventDefault();
+    const dayData = await db.days
+      .where(':id')
+      .equals(selectedDateTimestamp)
+      .toArray();
+
+    /* if selectedDateTimestamp value exists in dexie */
+    if (dayData[0]) {
+      const {
+        foodData
+      } = dayData[0];
+
+
+      /* update food data with values from dexie */
+      dispatchFoodData({ type: 'addFoodData', payload: { foodData } });
+    }
+  }
 
   const handleAutoSuggestInputChange = (event, { newValue, method }) => {
     setSelectedFood(newValue);
@@ -211,7 +230,6 @@ function DailyNutritionContainer() {
   };
 
   const handleRemoveFood = (event, id) => {
-    console.log(event, id);
     event.preventDefault();
     dispatchFoodData({ type: 'removeFood', payload: { id } });
   }
@@ -220,22 +238,25 @@ function DailyNutritionContainer() {
     setQuantity(event.target.value);
   };
 
-  const handleTimestampInputChange = (event) => {
-    setTimestamp(event.target.value);
+  const handleSelectedDateInputChange = (event) => {
+    setSelectedDateTimestamp(event.target.value);
   };
 
   const handleSaveDayData = async (event) => {
     const { foodData } = foodDataState;
     event.preventDefault();
 
-    const id = await db.days.put({ id: timestamp, totalNutrients, foodData }, timestamp);
-    console.log("Got id " + id);
+    await db.days.put({ id: selectedDateTimestamp, totalNutrients, foodData }, selectedDateTimestamp);
   };
 
   return (
     <>
       <div className="daily-nutrition-header">
-        <p>Header</p>
+        <SelectDayForm
+          selectedDateTimestamp={selectedDateTimestamp}
+          updateDailyNutritionData={handleUpdateDailyNutritionData}
+          updateSelectedDateTimestamp={handleSelectedDateInputChange}
+        />
       </div>
       <div className="daily-nutrition-body">
         <div className="section">
@@ -394,33 +415,12 @@ function DailyNutritionContainer() {
           </table>
         </div>
         <div className="section">
-          <form className="save-day-form">
-            <div className="grid-row">
-              <div className="grid-item grid-item-1-4">
-                <label
-                  className="label"
-                  htmlFor="timestamp"
-                >
-                  Timestamp:
-                </label>
-                <input
-                  className="input"
-                  id="timestamp"
-                  name="timestamp"
-                  value={timestamp}
-                  onChange={handleTimestampInputChange}
-                ></input>
-              </div>
-              <div className="grid-item grid-item-1-4">
-                <button
-                  className="button"
-                  onClick={handleSaveDayData}
-                >
-                  Save Day
-                </button>
-              </div>
-            </div>
-          </form>
+          <button
+            className="button"
+            onClick={handleSaveDayData}
+          >
+            Save Day
+          </button>
         </div>
       </div>
     </>
