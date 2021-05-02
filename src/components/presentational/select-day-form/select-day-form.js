@@ -25,7 +25,7 @@ const SelectDayForm = ({
         onChange={updateSelectedDateTimestamp}
       />
       <button
-        className="button"
+        className="button select-day-form__submit-button"
         type="submit"
       >
         Update

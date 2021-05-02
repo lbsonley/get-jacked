@@ -2,6 +2,7 @@
   position: sticky;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   height: 80px;
   top: 0;
   padding-left: 24px;
@@ -66,7 +67,7 @@
 
 .label {
   font-size: 18px;
-  padding-right: 12px;
+  margin-right: 12px;
 }
 
 .quantity-input {

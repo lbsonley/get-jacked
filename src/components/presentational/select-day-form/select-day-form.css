@@ -4,3 +4,7 @@
 .input.select-day-form__input {
   width: 120px;
 }
+
+.button.select-day-form__submit-button {
+  margin-left: 12px;
+}
