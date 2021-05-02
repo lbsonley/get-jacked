@@ -113,6 +113,10 @@ function reducer(state, action) {
           ...payload.foodData
         }
       }
+    case 'clearFoodData':
+      return {
+        foodData: {}
+      }
     case 'removeFood':
       const newFoodData = Object.keys(state.foodData)
         .filter((id) => id !== payload.id)
@@ -130,7 +134,7 @@ function reducer(state, action) {
   }
 }
 
-function getDateString() {
+function getTodayDateString() {
   const today = new Date();
 
   const day = today.getDate();
@@ -150,7 +154,7 @@ function DailyNutritionContainer() {
   /* suggestions provided to the AutoSuggest input in the add food form */
   const [suggestions, setSuggestions] = useState([]);
   /* save food list form Selected Dateinput value */
-  const [selectedDateTimestamp, setSelectedDateTimestamp] = useState(getDateString);
+  const [selectedDateTimestamp, setSelectedDateTimestamp] = useState(getTodayDateString);
   /* sum of nutritional values in food list */
   const [totalNutrients, setTotalNutrients] = useState({})
 
@@ -190,8 +194,8 @@ function DailyNutritionContainer() {
       .equals(selectedDateTimestamp)
       .toArray();
 
-    /* if selectedDateTimestamp value exists in dexie */
     if (dayData[0]) {
+      /* if selectedDateTimestamp value exists in dexie */
       const {
         foodData
       } = dayData[0];
@@ -199,6 +203,9 @@ function DailyNutritionContainer() {
 
       /* update food data with values from dexie */
       dispatchFoodData({ type: 'addFoodData', payload: { foodData } });
+    } else {
+      /* if selectedDateTimestamp values does not exist in dexie */
+      dispatchFoodData({ type: 'clearFoodData' })
     }
   }
 
