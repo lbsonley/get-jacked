@@ -1,16 +1,27 @@
-/**
- * grid styles
- * TODO => improve: DRY up, abstract, and gutters
- */
-
- .grid-container {
-  position: relative;
+.daily-nutrition-header {
+  position: sticky;
   display: flex;
-  flex-flow: row wrap;
-  max-width: 768px;
+  align-items: center;
+  height: 80px;
+  top: 0;
+  padding-left: 24px;
+  background-color: #926DDE;
+  z-index: 2;
+}
+
+.daily-nutrition-body,
+.daily-nutrition-header {
+  padding: 0 32px;
+}
+  
+.section {
   margin: 32px auto;
 }
 
+/**
+  * grid styles
+  * TODO => improve: DRY up, abstract, and gutters
+  */
 .grid-row {
   display: flex;
   flex: 1 0 100%;
@@ -45,8 +56,8 @@
 
 .input {
   width: 320px;
-  height: 40px;
-  padding: 20px 20px;
+  height: auto;
+  padding: 12px 8px;
   font-weight: 300;
   font-size: 16px;
   border: 1px solid #aaa;
@@ -144,8 +155,8 @@
 
 .react-autosuggest__input {
   width: 320px;
-  height: 40px;
-  padding: 20px 20px;
+  height: auto;
+  padding: 12px 8px;
   font-weight: 300;
   font-size: 16px;
   border: 1px solid #aaa;

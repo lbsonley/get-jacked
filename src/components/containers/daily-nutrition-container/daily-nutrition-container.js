@@ -234,195 +234,195 @@ function DailyNutritionContainer() {
 
   return (
     <>
-      <div className="grid-container">
-        <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
+      <div className="daily-nutrition-header">
+        <p>Header</p>
       </div>
-      <form className="add-food-form">
-        <div className="grid-container">
-          <div className="grid-row">
-            <div className="grid-item grid-item-1-4">
-              <label
-                className="label"
-                htmlFor="quantity"
-              >
-                Quantity:
-              </label>
-              <input
-                className="input quantity-input"
-                id="quantity"
-                name="quantity"
-                value={quantity}
-                onChange={handleQuantityInputChange}
-              ></input>
-            </div>
+      <div className="daily-nutrition-body">
+        <div className="section">
+          <p>Enter the quantity and type of food that you ate to track your daily caloric and macro nutrient goals.</p>
+          <form className="add-food-form">
+            <div className="grid-row">
+              <div className="grid-item grid-item-1-4">
+                <label
+                  className="label"
+                  htmlFor="quantity"
+                >
+                  Quantity:
+                </label>
+                <input
+                  className="input quantity-input"
+                  id="quantity"
+                  name="quantity"
+                  value={quantity}
+                  onChange={handleQuantityInputChange}
+                ></input>
+              </div>
 
-            <div className="grid-item grid-item-1-2">
-              <label
-                className="label"
-                htmlFor="food-input"
-              >
-                Food:
-              </label>
-              <AutoSuggest 
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={{
-                  id: "food-input",
-                  onChange: handleAutoSuggestInputChange,
-                  value: selectedFood,
-                }}
-              />
+              <div className="grid-item grid-item-1-2">
+                <label
+                  className="label"
+                  htmlFor="food-input"
+                >
+                  Food:
+                </label>
+                <AutoSuggest 
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={{
+                    id: "food-input",
+                    onChange: handleAutoSuggestInputChange,
+                    value: selectedFood,
+                  }}
+                />
+              </div>
+              <div className="grid-item grid-item-1-4">
+                <button
+                  className="button"
+                  onClick={handleAddFood}
+                >
+                  Add +
+                </button>
+              </div>
             </div>
-            <div className="grid-item grid-item-1-4">
-              <button
-                className="button"
-                onClick={handleAddFood}
-              >
-                Add +
-              </button>
-            </div>
-          </div>
-          <div className="grid-row">
-          </div>
+          </form>
         </div>
-      </form>
-      <div className="grid-container">
-
-        <table className="table">
-          <thead className="table-header">
-            <tr className="table-row table-row--labels">
-              <th
-                className="table-cell table-column__heading"
-                scope="col"
-              >
-                Food
-              </th>
-              <th
-                className="table-cell table-column__heading"
-                scope="col"
-              >
-                Cal
-              </th>
-              <th
-                className="table-cell table-column__heading"
-                scope="col"
-              >
-                Carb
-              </th>
-              <th
-                className="table-cell table-column__heading"
-                scope="col"
-              >
-                Pro
-              </th>
-              <th
-                className="table-cell table-column__heading"
-                scope="col"
-              >
-                Fat
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.values(foodDataState.foodData).map(food => {
-              const {
-                id,
-                nutrition: {
-                  calories,
-                  carbohydrates,
-                  fat,
-                  name,
-                  protein,
-                }
-              } = food;
-              return (
-                <tr key={id}className="table-row">
-                  <th
-                    className="table-cell table-row__heading"
-                    scope="row"
-                  >
-                    {name}
-                  </th>
-                  <td className="table-cell">
-                    {calories}
-                  </td>
-                  <td className="table-cell">
-                    {carbohydrates}
-                  </td>
-                  <td className="table-cell">
-                    {protein}
-                  </td>
-                  <td className="table-cell">
-                    {fat}
-                  </td>
-                  <td className="table-cell table-cell--delete">
-                    <button
-                      className="button"
-                      onClick={(event) => { handleRemoveFood(event, id) }}
+        <div className="section">
+          <table className="table">
+            <thead className="table-header">
+              <tr className="table-row table-row--labels">
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Food
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Cal
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Carb
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Pro
+                </th>
+                <th
+                  className="table-cell table-column__heading"
+                  scope="col"
+                >
+                  Fat
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(foodDataState.foodData).map(food => {
+                const {
+                  id,
+                  nutrition: {
+                    calories,
+                    carbohydrates,
+                    fat,
+                    name,
+                    protein,
+                  }
+                } = food;
+                return (
+                  <tr key={id}className="table-row">
+                    <th
+                      className="table-cell table-row__heading"
+                      scope="row"
                     >
-                      X
-                    </button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-          <tfoot className="table-footer">
-            <tr className="table-row totals-row">
-              <th
-                className="table-cell table-row__heading"
-                scope="row"
-              >
-                Totals:
-              </th>
-              <td className="table-cell table-cell__footer">
-                {`${totalNutrients.calories} kcal`}
-              </td>
-              <td className="table-cell table-cell__footer">
-                {`${totalNutrients.carbohydrates} g`}
-              </td>
-              <td className="table-cell table-cell__footer">
-                {`${totalNutrients.protein} g`}
-              </td>
-              <td className="table-cell table-cell__footer">
-                {`${totalNutrients.fat} g`}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <form className="save-day-form">
-        <div className="grid-container">
-          <div className="grid-row">
-            <div className="grid-item grid-item-1-4">
-              <label
-                className="label"
-                htmlFor="timestamp"
-              >
-                Timestamp:
-              </label>
-              <input
-                className="input"
-                id="timestamp"
-                name="timestamp"
-                value={timestamp}
-                onChange={handleTimestampInputChange}
-              ></input>
-            </div>
-            <div className="grid-item grid-item-1-4">
-              <button
-                className="button"
-                onClick={handleSaveDayData}
-              >
-                Save Day
-              </button>
-            </div>
-          </div>
+                      {name}
+                    </th>
+                    <td className="table-cell">
+                      {calories}
+                    </td>
+                    <td className="table-cell">
+                      {carbohydrates}
+                    </td>
+                    <td className="table-cell">
+                      {protein}
+                    </td>
+                    <td className="table-cell">
+                      {fat}
+                    </td>
+                    <td className="table-cell table-cell--delete">
+                      <button
+                        className="button"
+                        onClick={(event) => { handleRemoveFood(event, id) }}
+                      >
+                        X
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+            <tfoot className="table-footer">
+              <tr className="table-row totals-row">
+                <th
+                  className="table-cell table-row__heading"
+                  scope="row"
+                >
+                  Totals:
+                </th>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.calories} kcal`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.carbohydrates} g`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.protein} g`}
+                </td>
+                <td className="table-cell table-cell__footer">
+                  {`${totalNutrients.fat} g`}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
-      </form>
+        <div className="section">
+          <form className="save-day-form">
+            <div className="grid-row">
+              <div className="grid-item grid-item-1-4">
+                <label
+                  className="label"
+                  htmlFor="timestamp"
+                >
+                  Timestamp:
+                </label>
+                <input
+                  className="input"
+                  id="timestamp"
+                  name="timestamp"
+                  value={timestamp}
+                  onChange={handleTimestampInputChange}
+                ></input>
+              </div>
+              <div className="grid-item grid-item-1-4">
+                <button
+                  className="button"
+                  onClick={handleSaveDayData}
+                >
+                  Save Day
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </>
   );
 }
